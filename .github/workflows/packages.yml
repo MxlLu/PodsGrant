@@ -51,3 +51,36 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
+  build-roothide:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      - name: Cache theos (roothide)
+        id: cache-theos-roothide
+        uses: actions/cache@v6
+        with:
+          key: pg-theos-roothide-cache1
+          path: ~/theos
+
+      - name: Install theos (roothide), etc.
+        if: steps.cache-theos-roothide.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/roothide/theos.git -q --depth 1 --recursive ~/theos
+          cd ~/theos && rm -rf sdks && git clone https://github.com/theos/sdks.git -q --depth 1
+          curl -sL https://github.com/kabiroberai/swift-toolchain-linux/releases/download/v2.3.0/swift-5.8-ubuntu20.04.tar.xz | tar -xJf - -C ~/theos/toolchain/
+          sed -i 's/$(ECHO_MERGING)$(ECHO_UNBUFFERED)$(TARGET_LIPO) $(foreach ARCH,$(TARGET_ARCHS),-arch $(ARCH) $(THEOS_OBJ_DIR)\/$(ARCH)\/$(1)) -create -output "$$@"$(ECHO_END)/\0\nifneq (,$(filter $(THEOS_PACKAGE_SCHEME),rootless roothide))\nifneq ($(filter arm64e,$(TARGET_ARCHS)),)\n\t~\/theos\/allemande\/allemande "$$@"\nendif\nendif/' ~/theos/makefiles/instance/rules.mk
+          cd ~/theos && git clone https://github.com/p0358/allemande --depth 1 && cd allemande && g++ -std=c++20 -o allemande main.cpp
+      - name: Build roothide package
+        run: |
+          export THEOS=~/theos
+          make -j2 package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide
+      - name: Upload roothide package
+        uses: actions/upload-artifact@v7
+        with:
+          name: ROOTHIDE-podsgrant-${{ github.sha }}
+          path: packages/com*.deb
+          if-no-files-found: error
+          retention-days: 3
+
