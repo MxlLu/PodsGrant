@@ -98,10 +98,14 @@ static const struct product_id_map_entry product_id_map_preset[] = {
 	{8228, 8206, 0, 15},
 	{8231, 8206, 0, 15}, // AirPods Pro 3 -> AirPods Pro
 	{8232, 8206, 0, 15}, // AirPods Pro 3 -> AirPods Pro
+	{8240, 8206, 0, 15}, // AirPods 5 (Wireless Charging Case) -> AirPods Pro
+	{8246, 8206, 0, 15}, // AirPods 5 -> AirPods Pro
 	{8228, 8212, 16, 255}, // iOS 16 natively supports lightning airpods pro 2 ig
 	{8219, 8212, 16, 255}, // AirPods 4 -> AirPods Pro 2 Lightning
 	{8231, 8212, 16, 255}, // AirPods Pro 3 -> AirPods Pro 2 Lightning
 	{8232, 8212, 16, 255}, // AirPods Pro 3 -> AirPods Pro 2 Lightning
+	{8240, 8212, 16, 255}, // AirPods 5 (Wireless Charging Case) -> AirPods Pro 2 Lightning
+	{8246, 8212, 16, 255}, // AirPods 5 -> AirPods Pro 2 Lightning
 	{8221, 8203, 0, 16},
 	{8211, 8207, 0, 255},
 	{8214, 8209, 0, 255},
